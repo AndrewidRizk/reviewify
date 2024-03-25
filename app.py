@@ -43,9 +43,16 @@ class DataProcessingHandler(Resource):
         reviews = main_get_total_reviews(restaurant_name=restaurant, postal_code=postal)
         reviews_result = classify_reviews(reviews)
         totalReviews = reviews_result[-1] + reviews_result[-2] + reviews_result[-3]
-        posPercent = round(reviews_result[-3]/totalReviews*100)
-        negPercent = round(reviews_result[-2]/totalReviews*100)
-        unrelatedPercent = round(reviews_result[-1]/totalReviews*100)
+    
+        # Check if totalReviews is zero to avoid division by zero
+        if totalReviews == 0:
+            # Handle the case when totalReviews is zero
+            # For example, you might return None or raise an exception
+            return None
+        
+        posPercent = round(reviews_result[-3] / totalReviews * 100)
+        negPercent = round(reviews_result[-2] / totalReviews * 100)
+        unrelatedPercent = round(reviews_result[-1] / totalReviews * 100)
         classified_result, pos, neg, unrel = classify_reviews(reviews)
         summary = summarize_reviews(classified_result)
 
